@@ -1,8 +1,12 @@
+*************************************
 OpenPBS Installation (version:20.0.1)
-_____________________
+*************************************
 
 Link 1: https://github.com/openpbs/openpbs/blob/master/INSTALL
-_______
+_____________________________________________________________
+
+On Master:
+_________
 
  
 For CentOS-7 systems you should run the following command as root:
@@ -19,14 +23,13 @@ For CentOS-7 systems you should run the following command as root:
 
 
 Link 2: https://github.com/openpbs/openpbs/releases/tag/v20.0.1
-_______
-
+_______________________________________________________________
 
 # wget (Source Code)tar.gz from Link 2    		file is downloaded
 
-# mv v20.0.1.tar.gz	openpbs-20.0.1.tar.gz		(Only to be done if master is minimal or wget command is used otherwise download using browser)
+# mv v20.0.1.tar.gz openpbs-20.0.1.tar.gz		(Only to be done if master is minimal or wget command is used otherwise download using browser)
 
-# yum install libtool-ltdl-devel       			(Dependency error : It is needed by openpbs-20.0.1-0.x86_64)
+# yum install libtool-ltdl-devel -y        			(Dependency error : It is needed by openpbs-20.0.1-0.x86_64)
 
 # cd Downloads
 
@@ -64,20 +67,26 @@ Now login to any user in the machine (master)
 
 
 
-
 -----------------------------------------------------------------------------------
 Adding compute nodes to master of openpbs
 
 on master
 ----------------------
+# cd /root/rpmbuild/RPMS/x86_64
+
 # cp openpbs-execution-20.0.1-0.x86_64.rpm  /root/home/
 
 on node1
 ------------------------------------------------------------------------------------
 # cd /root/home
+
 # rpm -ivh openpbs-execution-20.0.1-0.x86_64.rpm
 
 (install all dependencies)
+
+# yum install hwloc-libs libICE.so.*  libSM.so.* libhwloc.so.* libpython3.6m.so.*  libtcl8.5.so *libtk8.5.so* python3 -y
+
+# rpm -ivh openpbs-execution-20.0.1-0.x86_64.rpm
 
 # vi /etc/pbs.conf  
 
@@ -87,9 +96,9 @@ on node1
 
 ($clienthost master)
 
-#/etc/init.d/pbs start
+# /etc/init.d/pbs start
 
-#/etc/init.d/pbs status
+# /etc/init.d/pbs status
 
 
 on master
@@ -104,7 +113,7 @@ on master
 
 # . /etc/profile.d/pbs.sh  (Source similar to xcat)
 
-#pbsnodes -a
+# pbsnodes -a
 
 ------------------------------------------------------------------------------------
 
@@ -139,4 +148,19 @@ Note:-> Ownership of file must belong to hpcsa
 # qstat 
 
 # qstat -ans 
+
+_______________________________________________________________
+
+Creating a routing queue (route1) with 'batch' as destination
+---------------------------------------------------------------
+To be done on master
+--------------------
+# qmgr 
+# qmgr: p s
+# qmgr: create queue route1
+# qmgr: set queue route1 queue_type = Route
+# qmgr: set queue route1 acl_host_enable = True
+# qmgr: set queue route1 route_destinations = batch
+# qmgr: set queue route1 enabled = True
+# qmgr: set queue route1 started = True
 
