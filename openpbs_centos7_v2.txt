@@ -149,6 +149,11 @@ Note:-> Ownership of file must belong to hpcsa
 
 # qstat -ans 
 
+>>>>>>>>>>>>>
+Some more useful Commands
+-------------------------
+# qdel          -> for deletetion of job
+
 _______________________________________________________________
 
 Creating a routing queue (route1) with 'batch' as destination
